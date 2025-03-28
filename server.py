@@ -15,11 +15,18 @@ while True:
         new_socket.setblocking(False)
         players.append(new_socket)
     except BlockingIOError as e:
-        print("Connection to new player unsecure")
+        print("-")
     for sock in players:
         try:
             data = sock.recv(1024).decode()
             print(f"Received: {data}")
         except Exception as e:
             pass
+    for sock in players:
+        try:
+            sock.send("Game".encode())
+        except:
+            players.remove(sock)
+            sock.close()
+            print("Socket closed")
     time.sleep(1)
